@@ -8,6 +8,9 @@ export default makeScene2D(function* (view) {
     const dvBox = createRef<Rect>();
     const ovBox = createRef<Rect>();
     const evBox = createRef<Rect>();
+    const cmd = createRef<Rect>()
+    const linecmd = createRef<Txt>()
+    const output = createRef<Txt>()
 
     view.add(
         <Rect
@@ -21,7 +24,101 @@ export default makeScene2D(function* (view) {
                 fontFamily={'Source Code Pro'}
                 fontWeight={600}
                 ref={title}
+                zIndex={1}
             />
+            <Rect
+                fill={'#1e1e1e'}
+                radius={12}
+                width={800}
+                height={300}
+                ref={cmd}
+                layout
+                justifyContent={'start'}
+                alignItems={'start'}
+                direction={'column'}
+                y={100}
+                opacity={0}
+            >
+                <Rect
+                    fill={'#252525'}
+                    radius={12}
+                    height={64}
+                    width={800}
+                    layout
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                >
+                    <Rect
+                        marginLeft={12}
+                        gap={6}
+                    >
+                        <Icon
+                            icon={'material-symbols:expand-circle-down'}
+                            size={32}
+                            opacity={0}
+                        />
+                        <Icon
+                            icon={'material-symbols:x-circle'}
+                            size={32}
+                            opacity={0}
+                        />
+                    </Rect>
+                    <Txt
+                        fontSize={32}
+                        fill={'#ffffff'}
+                        text={'cmd'}
+                        fontFamily={'Source Code Pro'}
+                        paddingLeft={12}
+                    />
+                    <Rect
+                        marginRight={12}
+                        gap={6}
+                    >
+                        <Icon
+                            icon={'material-symbols:expand-circle-down'}
+                            size={32}
+                        />
+                        <Icon
+                            icon={'material-symbols:x-circle'}
+                            size={32}
+                        />
+                    </Rect>
+                </Rect>
+                <Rect
+                    direction={'column'}
+                    gap={8}
+                >
+                    <Rect>
+                        <Txt
+                            fontSize={22}
+                            fill={'#a1a1a1'}
+                            text={'[hitomihiumi@archlinux ~]$'}
+                            fontFamily={'Source Code Pro'}
+                            paddingLeft={24}
+                            paddingTop={24}
+                            paddingRight={24}
+                        />
+                        <Txt
+                            fontSize={22}
+                            fill={'#ffffff'}
+                            text={''}
+                            fontFamily={'Source Code Pro'}
+                            paddingRight={24}
+                            paddingTop={24}
+                            ref={linecmd}
+                        />
+                    </Rect>
+                    <Txt
+                        fontSize={22}
+                        fill={'#00ff00'}
+                        text={''}
+                        fontFamily={'Source Code Pro'}
+                        paddingLeft={24}
+                        paddingBottom={24}
+                        ref={output}
+                    />
+                </Rect>
+            </Rect>
             <Rect
                 ref={content}
                 opacity={0}
@@ -148,6 +245,18 @@ export default makeScene2D(function* (view) {
             dvBox().opacity(0, 0.5),
             ovBox().opacity(0, 0.5),
             evBox().opacity(0, 0.5),
-        )
+            dvBox().y(20, 0.5),
+            ovBox().y(20, 0.5),
+            evBox().y(240, 0.5),
+        ),
+        all(
+            cmd().y(0, 0.5),
+            cmd().opacity(1, 0.5),
+        ),
+        linecmd().text('sudo certbot --nginx', 0.5),
+        waitFor(1),
+        linecmd().fill('#a1a1a1', 0.5),
+        output().text('Server: Successfully obtained certificate for domain \nexample.com', 1),
+        waitFor(1)
     )
 });
